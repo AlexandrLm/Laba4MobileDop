@@ -1,17 +1,12 @@
 package com.example.laba4mobiledop
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.google.android.material.color.utilities.Score
-
 class GameActivity : AppCompatActivity() {
     private lateinit var chestsContainer: LinearLayout
     private lateinit var chests1Container: LinearLayout
@@ -24,7 +19,6 @@ class GameActivity : AppCompatActivity() {
     private var curRound : Int = 1
     private var curScore : Int = 0
     private lateinit var settings: Settings
-
 
     private val chestPoints = mutableListOf<Int>() // список очков для каждого сундука
 
@@ -42,19 +36,14 @@ class GameActivity : AppCompatActivity() {
 
         settings = intent.getParcelableExtra<Settings>("settings")!!
 
-        if (settings != null) {
-            fillChests(settings.numberOfChests - 5,settings.numberOfTraps)
-            // Распределяем ловушки и очки между сундуками
-            distributeTrapsAndPoints(settings.numberOfChests,settings.numberOfTraps)
-        }
+        fillChests(settings.numberOfChests - 5,settings.numberOfTraps)
+        distributeTrapsAndPoints(settings.numberOfChests,settings.numberOfTraps) // Распределяем ловушки и очки между сундуками
         updateAllText()
     }
-
     @SuppressLint("ResourceAsColor", "ResourceType")
     private fun fillChests(chests: Int, traps: Int) {
         chests1Container.removeAllViews() // удаляем все существующие кнопки, если есть
         chestsContainer.removeAllViews()
-
         val few = btn.background
         for (i in 1..5) {
             val chestButton = Button(this)
@@ -83,15 +72,12 @@ class GameActivity : AppCompatActivity() {
             chestPoints.add(0)
         }
         chestsContainer.removeView(chestsContainer.findViewById(chests+6))
-
-
     }
     @SuppressLint("ResourceAsColor")
     private fun openChest(chest: Button) {
         // Открытие сундука и отображение очков или ловушки
         chest.isActivated = true
         chest.setTextColor(R.color.buttons)
-
         if (chestPoints[chest.id - 1] != Int.MIN_VALUE) {
             chest.text = "${chestPoints[chest.id - 1]}"
             curScore += chestPoints[chest.id - 1]
@@ -118,7 +104,6 @@ class GameActivity : AppCompatActivity() {
             allPoints[i] = Int.MIN_VALUE // используем Int.MIN_VALUE для представления ловушки
         }
         allPoints.shuffle() // Перемешиваем список, чтобы очки и ловушки были распределены случайным образом
-
         for (i in allPoints)
             println(i)
         // Распределяем очки и ловушки между сундуками
@@ -127,7 +112,6 @@ class GameActivity : AppCompatActivity() {
             //println(chestPoints[i])
         }
     }
-
     fun updateAllText(){
         scoreText.text = getString(R.string.score_text, score.toString())
         curRoundText.text = getString(R.string.cur_round_text, curRound.toString())
@@ -140,7 +124,6 @@ class GameActivity : AppCompatActivity() {
         distributeTrapsAndPoints(settings.numberOfChests,settings.numberOfTraps) // Распределяем ловушки и очки между сундуками
         updateAllText()
     }
-
     fun newRound(v : View){
         score += curScore
         curScore = 0
